@@ -1,5 +1,5 @@
-import type { Interval } from "luxon";
+//import type { Interval } from "luxon";
 
 export class Task {
-    constructor(readonly name: string, public intervals: Interval[] = [], readonly id: string = name) {}
+    constructor(readonly name: string, public intervals: string[] = [], readonly id: string = name) {}
 }

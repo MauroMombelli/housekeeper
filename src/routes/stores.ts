@@ -9,13 +9,20 @@ const createWritableStore = (key: string, startValue: Task[]) => {
       const json = localStorage.getItem(key);
     
       if (json) {
-        set(JSON.parse(json));
+        var obj = JSON.parse(json,function(key, value){
+          if(typeof value != 'string') return value;
+          return ( value.substring(0,8) == 'function') ? eval('('+value+')') : value;
+        });
+        set(obj);
       }
     }
     
     subscribe(current => {
       if(typeof window !== 'undefined') {
-        localStorage.setItem(key, JSON.stringify(current));
+        var string = JSON.stringify(current, function(key, value){
+          return (typeof value === 'function' ) ? value.toString() : value;
+        });
+        localStorage.setItem(key, string);
       }
     });
 

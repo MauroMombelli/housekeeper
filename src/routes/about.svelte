@@ -1,11 +1,15 @@
 <svelte:head>
-	<title>About</title>
+	<title>Riepilogue</title>
 </svelte:head>
 
 <script lang='ts'>
-	import { Duration } from 'luxon'
-
+	import { Task } from './task'
+	import { Interval, Duration } from 'luxon'
 	import { taskList, taskListComplete } from './stores';
+
+	var sumInterval = function(acc:Duration, ISOinterval: string){
+		return acc.plus(Interval.fromISO(ISOinterval).toDuration());
+	}
 </script>
 
 
@@ -17,10 +21,13 @@
 </style>
 
 <div>
+	Running Tasks:
 	<ul>
 		{#each $taskList as task, taskIndex(task)}
 			<li>
-				Task: {task.name} Total elapsed: {task.intervals.reduce((acc, interval)=>{return acc.plus(interval.toDuration());}, Duration.fromMillis(0)).toFormat("d hh:mm:ss")}
+				Task: {task.name} Total elapsed: {
+					task.intervals.reduce(sumInterval, Duration.fromMillis(0)).toFormat("d hh:mm:ss")
+				}
 				<ul>
 					{#each task.intervals as interval}
 						<li>duration: {interval}</li>
@@ -29,11 +36,11 @@
 			</li>
 		{/each}
 	</ul>
-
+	Completed Tasks:
 	<ul>
 		{#each $taskListComplete as task, taskIndex(task)}
 			<li>
-				Task: {task.name} Total elapsed: {task.intervals.reduce((acc, interval)=>{return acc.plus(interval.toDuration());}, Duration.fromMillis(0)).toFormat("d hh:mm:ss")}
+				Task: {task.name} Total elapsed: {task.intervals.reduce(sumInterval, Duration.fromMillis(0)).toFormat("d hh:mm:ss")}
 				<ul>
 					{#each task.intervals as interval}
 						<li>duration: {interval}</li>

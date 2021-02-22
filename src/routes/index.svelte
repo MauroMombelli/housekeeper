@@ -12,18 +12,6 @@
 	let titolo = 0;
 	setInterval(() => titolo += 1, 1000);
 
-	if ($taskList.length == 0){
-		//add fake data
-		$taskList = [...$taskList, new Task("test 1")];
-		$taskList = [...$taskList, new Task("test 2")];
-
-		let later = DateTime.local();
-		let now = DateTime.local(2020, 10, 12);
-		let i = Interval.fromDateTimes(now, later);
-
-		$taskList  = [...$taskList, new Task("test 3", [i])];
-	}
-
 	let newTaskName:string;
 
 	class ExecutingTask{
@@ -74,7 +62,7 @@
 			}else{
 				alert('under a minute, should not add the interval');
 			}
-			activity.task.intervals = [...activity.task.intervals, interval ];
+			activity.task.intervals = [...activity.task.intervals, interval.toISO() ];
 			$taskList = $taskList; // tell svelte the list has changed!
 		}
 		activity = undefined;
